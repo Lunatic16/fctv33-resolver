@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="FCTV33 live matches — resolve and play instantly.">
+  <title>FCTV33 Live</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.20/dist/hls.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar__brand">
+        <span class="topbar__logo">FCTV33</span>
+        <span class="topbar__tag">Live</span>
+      </div>
+      <div class="topbar__aside">
+        <div class="status" aria-live="polite">
+          <span class="status__dot" aria-hidden="true"></span>
+          <span id="live-meta" class="status__text">—</span>
+        </div>
+        <button type="button" id="refresh-button" class="btn">Refresh</button>
+      </div>
+    </header>
+
+    <nav id="sport-tabs" class="sports" role="tablist" aria-label="Sport"></nav>
+    <p id="error-message" class="banner" hidden></p>
+
+    <div class="workspace">
+      <aside class="rail" aria-label="Live matches">
+        <div class="rail__head">
+          <span class="rail__label">Matches</span>
+          <div class="rail__actions">
+            <button type="button" id="m3u-copy" class="btn btn--soft" title="Copy the live .m3u playlist (all sports) to the clipboard">Copy M3U</button>
+            <a class="btn btn--soft" href="/playlist.m3u?download=1" download="fctv33-live.m3u" title="Download the live .m3u playlist (all sports)">Download M3U</a>
+          </div>
+        </div>
+        <ul id="match-list" class="matches"></ul>
+      </aside>
+
+      <section class="stage" aria-label="Player">
+        <div class="stage__bar">
+          <h1 id="stream-title" class="stage__title">Select a Match</h1>
+          <ul id="timing-panel" class="timing" hidden>
+            <li class="timing__item">
+              <span class="timing__k">Resolve</span>
+              <span id="timing-resolve" class="timing__v">—</span>
+            </li>
+            <li class="timing__item">
+              <span class="timing__k">First Frame</span>
+              <span id="timing-play" class="timing__v">—</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="stage__body">
+          <div class="screen">
+            <div class="screen__idle">
+              <p class="screen__idle-brand">FCTV33</p>
+              <p class="screen__idle-copy">Pick a live match to resolve and play.</p>
+            </div>
+            <video id="video-element" class="screen__video" controls playsinline autoplay hidden></video>
+          </div>
+
+          <div id="exports" class="exports" hidden>
+            <div class="export">
+              <span class="export__k">Direct</span>
+              <div class="export__row">
+                <input id="export-direct-url" readonly>
+                <button type="button" class="btn btn--soft" data-copy="export-direct-url">Copy</button>
+              </div>
+            </div>
+            <div class="export">
+              <span class="export__k">Proxied</span>
+              <div class="export__row">
+                <input id="export-proxied-url" readonly>
+                <button type="button" class="btn btn--soft" data-copy="export-proxied-url">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

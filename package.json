@@ -1,0 +1,16 @@
+{
+  "name": "fctv33-stream-resolver",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.client.json && cp src/client/index.html src/client/styles.css dist/client/",
+    "start": "npm run build && (lsof -tiTCP:${PORT:-3000} -sTCP:LISTEN | xargs -r kill -9 2>/dev/null || true) && (pkill -9 -f '^node dist/server/main\\.js$' 2>/dev/null || true) && node dist/server/main.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.client.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,10 @@
+services:
+  fctv33:
+    build: .
+    image: fctv33-stream-resolver:latest
+    container_name: fctv33
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+    restart: unless-stopped
