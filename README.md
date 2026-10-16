@@ -14,9 +14,8 @@ Dynamic IPTV playlist · Docker packaging · Reverse-proxy-aware links · Zero r
 
 [Quick Start](#-quick-start) · [Docker](#-docker) · [Web UI](#-web-ui) · [REST API](#-rest-api) · [IPTV Playlist](#iptv-playlist) · [Common Issues](#-common-issues)
 
-<!-- Drop a screenshot/GIF here once you have one:
 ![FCTV33 Stream Resolver console](docs/screenshot.png)
--->
+
 
 </div>
 
