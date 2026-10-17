@@ -367,9 +367,9 @@ document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((button) => 
 el.m3uCopy.onclick = async () => {
   el.m3uCopy.disabled = true;
   try {
-    const response = await fetch("/playlist.m3u");
-    const text = await response.text();
-    flashButton(el.m3uCopy, response.ok && (await copyText(text)), "Copy M3U");
+    // Copy the playlist URL (not its contents) so IPTV clients can subscribe to it.
+    const playlistUrl = `${location.origin}/playlist.m3u`;
+    flashButton(el.m3uCopy, await copyText(playlistUrl), "Copy M3U");
   } catch {
     flashButton(el.m3uCopy, false, "Copy M3U");
   } finally {
