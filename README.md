@@ -172,7 +172,7 @@ The homepage is a compact live console — not a page-URL paste form.
 ### Layout
 
 - **Top bar** — FCTV33 branding, live count chip, Refresh
-- **Sport tabs** — horizontal filter (Football is default)
+- **Sport tabs** — horizontal filter (**All Sports** default — every live match in one request, labeled by sport — plus Football, Basketball, Tennis, and the site's full sport nav: Others, Motorsport, Rugby, Am. Football, Aussie Rules, Cricket, Hockey, Badminton, Baseball, Volleyball, Fighting, Cycling, Handball)
 - **Match rail** — scrollable list of live fixtures with match ids, plus **Copy M3U** and **Download M3U** actions in the rail header
 - **Stage** — title, resolve / first-frame timings, 16:9 player, export fields
 
@@ -236,7 +236,7 @@ curl -s "http://localhost:3000/api/live?sportType=1"
 
 | Query | Required | Notes |
 | --- | --- | --- |
-| `sportType` | no | Defaults to `1` (Football). Must be a finite number. |
+| `sportType` | no | Defaults to `1` (Football). Must be a finite number. `0` returns every live match across all sports — each match carries its own `sportType`. |
 
 Empty `matches` means nothing live for that sport right now — not necessarily an API failure.
 
@@ -339,8 +339,8 @@ Notes:
 
 - **Fresh unlock per channel** — entry URLs never contain CDN tokens; the slot resolves at tune-in.
 - **Self-healing** — expired upstream tokens trigger one re-unlock on the next manifest fetch.
-- **Short server-side TTL** — the all-sports live sweep is cached for 15 s, so IPTV clients polling the playlist do not hammer the catalog (cold sweep ≈ 1–2 s, warm ≈ instant).
-- **Partial failures tolerated** — a sport whose upstream list fails is skipped; the playlist only errors (`502`) when every sport fails.
+- **Short server-side TTL** — the all-sports list is fetched with a single upstream request (`sportType 0`, the site's "Live" tab) and cached for 15 s, so IPTV clients polling the playlist do not hammer the catalog (cold fetch ≈ 1 s, warm ≈ instant); if that request fails, the resolver falls back to sweeping each sport individually.
+- **Partial failures tolerated** — in the fallback sweep a sport whose upstream list fails is skipped; the playlist only errors (`502`) when every sport fails.
 - Served as `audio/x-mpegurl; charset=utf-8` with `Cache-Control: no-store`.
 - Entry URLs use the request's public origin, so the same playlist works directly and behind a reverse proxy.
 
@@ -394,20 +394,27 @@ Use `playableUrl` whenever the client cannot attach custom HTTP headers (most br
 
 ## 🏟 Sport Types
 
-Values match the upstream `sportType` field and the UI tabs.
+Values match the upstream `sportType` field and the UI tabs (in the site's own nav order).
 
 | `sportType` | Label |
 | ---: | --- |
+| 0 | All Sports (the site's "Live" tab — one request, every sport) |
 | 1 | Football |
 | 2 | Basketball |
 | 3 | Tennis |
-| 4 | Baseball |
-| 6 | Cricket |
+| 90 | Others |
 | 7 | Motorsport |
 | 8 | Rugby |
 | 9 | Am. Football |
+| 10 | Aussie Rules |
+| 6 | Cricket |
 | 11 | Hockey |
-| 90 | Others |
+| 12 | Badminton |
+| 4 | Baseball |
+| 13 | Volleyball |
+| 14 | Fighting |
+| 15 | Cycling |
+| 16 | Handball |
 
 ## 🧰 Stack and Scripts
 

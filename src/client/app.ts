@@ -20,18 +20,31 @@ type HlsApi = {
 
 declare const Hls: HlsApi;
 
+const ALL_SPORTS_TYPE = 0;
+
 const SPORTS = [
+  { type: ALL_SPORTS_TYPE, label: "All Sports" },
   { type: 1, label: "Football" },
   { type: 2, label: "Basketball" },
   { type: 3, label: "Tennis" },
-  { type: 4, label: "Baseball" },
-  { type: 6, label: "Cricket" },
+  { type: 90, label: "Others" },
   { type: 7, label: "Motorsport" },
   { type: 8, label: "Rugby" },
   { type: 9, label: "Am. Football" },
+  { type: 10, label: "Aussie Rules" },
+  { type: 6, label: "Cricket" },
   { type: 11, label: "Hockey" },
-  { type: 90, label: "Others" },
+  { type: 12, label: "Badminton" },
+  { type: 4, label: "Baseball" },
+  { type: 13, label: "Volleyball" },
+  { type: 14, label: "Fighting" },
+  { type: 15, label: "Cycling" },
+  { type: 16, label: "Handball" },
 ] as const;
+
+const SPORT_LABEL_BY_TYPE = new Map<number, string>(
+  SPORTS.filter((sport) => sport.type !== ALL_SPORTS_TYPE).map((sport) => [sport.type, sport.label]),
+);
 
 const el = {
   sports: document.getElementById("sport-tabs")!,
@@ -53,7 +66,7 @@ const el = {
 };
 
 const state = {
-  sportType: 1,
+  sportType: ALL_SPORTS_TYPE,
   matches: [] as LiveMatch[],
   activeId: null as number | null,
   loading: false,
@@ -229,7 +242,9 @@ const renderMatches = () => {
       title.textContent = match.name || `Match ${match.matchId}`;
       const meta = document.createElement("span");
       meta.className = "match__meta";
-      meta.textContent = `#${match.matchId}`;
+      // In All Sports mode the rail mixes sports, so label each match's sport.
+      const sport = state.sportType === ALL_SPORTS_TYPE ? SPORT_LABEL_BY_TYPE.get(match.sportType) : undefined;
+      meta.textContent = sport ? `${sport} · #${match.matchId}` : `#${match.matchId}`;
       button.append(title, meta);
       button.onclick = () => void playMatch(match);
       item.append(button);
